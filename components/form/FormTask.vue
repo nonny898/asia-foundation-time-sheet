@@ -1,33 +1,33 @@
 <template>
   <v-card>
-    <v-card-title class="headline"> New Task </v-card-title>
+    <v-card-title class="headline"> {{ title }} </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" sm="2">
+        <v-col cols="12" :sm="isEdit ? 4 : 2">
           <v-text-field
-            v-model="form.date"
+            v-model="$attrs.value.date"
             label="Date"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="2">
+        <v-col cols="12" :sm="isEdit ? 4 : 2">
           <v-text-field
-            v-model.number="form.hours"
+            v-model.number="$attrs.value.hours"
             type="number"
             label="Hours Worked"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="2">
+        <v-col cols="12" :sm="isEdit ? 4 : 2">
           <v-text-field
-            v-model="form.staff"
+            v-model="$attrs.value.staff"
             label="Work with Staff"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" :sm="isEdit ? 12 : 6">
           <v-text-field
-            v-model="form.description"
+            v-model="$attrs.value.description"
             label="Description"
             outlined
           ></v-text-field>
@@ -35,36 +35,24 @@
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <v-btn block @click="handleConfirm">Add Task</v-btn>
+      <v-btn block v-on="$listeners">{{ buttonText }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
-import { TaskInterface } from '~/pages/index.vue'
 
 @Component({})
 export default class FormTask extends Vue {
-  @Prop({ required: true }) addTask!: (task: TaskInterface) => void
+  @Prop({ default: false }) isEdit!: boolean
 
-  form: TaskInterface = {
-    id: 0,
-    date: '',
-    hours: 0,
-    staff: '',
-    description: '',
+  get title() {
+    return this.isEdit ? 'Edit Task' : 'New Task'
   }
 
-  handleConfirm() {
-    this.addTask(this.form)
-    this.form = {
-      id: 0,
-      date: '',
-      hours: 0,
-      staff: '',
-      description: '',
-    }
+  get buttonText() {
+    return this.isEdit ? 'Save' : 'Add New Task'
   }
 }
 </script>

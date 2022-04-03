@@ -4,28 +4,61 @@
       <div>The Asia Foundation</div>
       <div>Time Sheet</div>
     </div>
-    <div class="template-info__container">
-      <div>Name: {{ information.name }}</div>
-      <div>Pay Period: {{ information.payPeriod }}</div>
-      <div>Charge String: {{ information.chargeString }}</div>
-    </div>
-    <div class="template-table__container">
-      <detail-table :items="tasks" />
-    </div>
-    <div class="template-footer__container">
-      <div>Total Hours: {{ totalHours }}</div>
-      <div>Total Staffs: {{ totalStaff }}</div>
-      <div>Total Days: {{ totalDays }}</div>
-      <div>*** Remark: 8 hours is 1 working day</div>
-      <div>Submitted By: {{ information.name }}</div>
-      <div>Date: {{ information.date }}</div>
-    </div>
+    <v-row class="template-info__container">
+      <v-col cols="2"> Name: </v-col>
+      <v-col cols="10">
+        {{ information.name }}
+      </v-col>
+      <v-col cols="2"> Pay Period: </v-col>
+      <v-col cols="10">
+        {{ information.payPeriod }}
+      </v-col>
+      <v-col cols="2"> Charge String: </v-col>
+      <v-col cols="10">
+        {{ information.chargeString }}
+      </v-col>
+    </v-row>
+    <v-row class="template-table__container">
+      <v-col cols="12">
+        <detail-table :items="tasks" v-bind="$attrs" />
+      </v-col>
+    </v-row>
+    <v-row class="template-footer__container">
+      <v-col cols="2"> Total Hours: </v-col>
+      <v-col cols="10">
+        {{ totalHours }}
+      </v-col>
+      <v-col cols="2"> Total Staffs: </v-col>
+      <v-col cols="10">
+        {{ totalStaff }}
+      </v-col>
+      <v-col cols="2"> Total Days: </v-col>
+      <v-col cols="10">
+        {{ totalDays }}
+      </v-col>
+      <v-col cols="12">*** Remark: 8 hours is 1 working day</v-col>
+      <v-col cols="2"> Submitted By: </v-col>
+      <v-col cols="10">
+        {{ information.name }}
+      </v-col>
+      <v-col cols="2"> Date: </v-col>
+      <v-col cols="10">
+        {{ information.date }}
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-btn block @click="print">Print</v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
-import { InformationInterface, TaskInterface } from '~/pages/index.vue'
+import { InformationInterface } from '~/pages/index.vue'
+import { TaskInterface } from '~/types/Task/task.types'
+import * as PDFService from '~/utils/generate-pdf.utils.js'
 
 @Component({})
 export default class DetailTemplate extends Vue {
@@ -48,6 +81,19 @@ export default class DetailTemplate extends Vue {
 
   get totalDays() {
     return Math.floor(this.totalHours / 8)
+  }
+
+  print() {
+    PDFService.generatePDf(
+      this.tasks,
+      this.information.name,
+      this.information.payPeriod,
+      this.information.chargeString,
+      this.information.date,
+      this.totalHours,
+      this.totalStaff,
+      this.totalDays
+    )
   }
 }
 </script>
