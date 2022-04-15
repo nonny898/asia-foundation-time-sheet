@@ -64,6 +64,7 @@ import * as PDFService from '~/utils/generate-pdf.utils.js'
 export default class DetailTemplate extends Vue {
   @Prop({ required: true }) tasks!: TaskInterface[]
   @Prop({ required: true }) information!: InformationInterface
+  @Prop({ required: true }) importTasks!: () => Promise<void>
 
   get totalHours() {
     if (this.tasks.length > 0) {
@@ -83,7 +84,7 @@ export default class DetailTemplate extends Vue {
     return Math.floor(this.totalHours / 8)
   }
 
-  handlePrint() {
+  async handlePrint() {
     PDFService.generatePDf(
       this.tasks,
       this.information.name,
@@ -94,6 +95,7 @@ export default class DetailTemplate extends Vue {
       this.totalStaff,
       this.totalDays
     )
+    await this.importTasks()
   }
 }
 </script>

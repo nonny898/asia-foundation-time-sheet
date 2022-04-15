@@ -24,6 +24,7 @@
           :tasks="tasks"
           :edit-item="handleEditTask"
           :delete-item="handleDeleteTask"
+          :import-tasks="importTasks"
         />
       </v-col>
     </v-row>
@@ -164,7 +165,6 @@ export default class MainPage extends Vue {
       .limit(1)
       .single()
     if (data) {
-      console.log('🚀 ~ MainPage ~ handleAddTask ~ data', data)
       this.tasks.push(data)
     }
     this.loadingConfirmAdd = false

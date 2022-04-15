@@ -10,7 +10,6 @@ const getTableBody = (tasks) => {
       return value
     })
   })
-  console.log('🚀 ~ tableData ~ tableData', tableData)
   return [
     ['Date', 'Hours Worked', 'Work with Staff', 'Description'],
     ...tableData,
