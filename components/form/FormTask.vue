@@ -35,7 +35,11 @@
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <v-btn block v-on="$listeners">{{ buttonText }}</v-btn>
+      <v-btn v-if="isEdit" @click="handleCancel"> Cancel </v-btn>
+      <v-spacer />
+      <v-btn :block="!isEdit" :loading="loadingButton" v-on="$listeners">
+        {{ buttonText }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -46,6 +50,9 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 @Component({})
 export default class FormTask extends Vue {
   @Prop({ default: false }) isEdit!: boolean
+  @Prop({ default: false }) loadingConfirmAdd!: boolean
+  @Prop({ default: false }) loadingConfirmEdit!: boolean
+  @Prop({ required: false }) handleCancel!: () => void
 
   get title() {
     return this.isEdit ? 'Edit Task' : 'New Task'
@@ -53,6 +60,10 @@ export default class FormTask extends Vue {
 
   get buttonText() {
     return this.isEdit ? 'Save' : 'Add New Task'
+  }
+
+  get loadingButton() {
+    return this.isEdit ? this.loadingConfirmEdit : this.loadingConfirmAdd
   }
 }
 </script>

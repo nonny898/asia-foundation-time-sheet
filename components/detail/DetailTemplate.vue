@@ -48,7 +48,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-btn block @click="print">Print</v-btn>
+        <v-btn block @click="handlePrint">Print</v-btn>
       </v-col>
     </v-row>
   </div>
@@ -83,7 +83,7 @@ export default class DetailTemplate extends Vue {
     return Math.floor(this.totalHours / 8)
   }
 
-  print() {
+  handlePrint() {
     PDFService.generatePDf(
       this.tasks,
       this.information.name,

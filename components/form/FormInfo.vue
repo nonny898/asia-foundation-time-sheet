@@ -3,32 +3,34 @@
     <v-card-title class="headline"> Main Information </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="$attrs.value.name"
             label="Name"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="$attrs.value.payPeriod"
             label="Pay Period"
             outlined
+            disabled
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="$attrs.value.chargeString"
             label="Charge String"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="3">
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="$attrs.value.date"
-            label="Date"
+            label="Last Modified"
             outlined
+            disabled
           ></v-text-field>
         </v-col>
       </v-row>
