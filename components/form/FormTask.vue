@@ -3,34 +3,46 @@
     <v-card-title class="headline"> {{ title }} </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" :sm="isEdit ? 4 : 2">
-          <v-text-field
-            v-model="$attrs.value.date"
-            label="Date"
-            outlined
-          ></v-text-field>
+        <v-col class="pa-0" cols="12" :sm="isEdit ? 12 : 6">
+          <v-row>
+            <v-col cols="12" :sm="isEdit ? 4 : 12">
+              <v-text-field
+                v-model="$attrs.value.date"
+                label="Date"
+                outlined
+                hide-details=""
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" :sm="isEdit ? 4 : 12">
+              <v-text-field
+                v-model.number="$attrs.value.hours"
+                type="number"
+                label="Hours Worked"
+                outlined
+                hide-details=""
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" :sm="isEdit ? 4 : 12">
+              <v-text-field
+                v-model="$attrs.value.staff"
+                label="Work with Staff"
+                outlined
+                hide-details=""
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </v-col>
-        <v-col cols="12" :sm="isEdit ? 4 : 2">
-          <v-text-field
-            v-model.number="$attrs.value.hours"
-            type="number"
-            label="Hours Worked"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" :sm="isEdit ? 4 : 2">
-          <v-text-field
-            v-model="$attrs.value.staff"
-            label="Work with Staff"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" :sm="isEdit ? 12 : 6">
-          <v-text-field
-            v-model="$attrs.value.description"
-            label="Description"
-            outlined
-          ></v-text-field>
+        <v-col class="pa-0" cols="12" :sm="isEdit ? 12 : 6">
+          <v-row>
+            <v-col cols="12">
+              <v-textarea
+                v-model="$attrs.value.description"
+                rows="6"
+                label="Description"
+                outlined
+              ></v-textarea>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-card-text>
