@@ -12,8 +12,8 @@
       <v-col cols="12">
         <form-task
           v-model="newTask"
+          :loading-confirm-add="loadingConfirmAdd"
           @click="handleConfirm"
-          :loadingConfirmAdd="loadingConfirmAdd"
         />
       </v-col>
     </v-row>
@@ -36,8 +36,8 @@
         <form-task
           v-model="existingTask"
           :is-edit="true"
-          :handleCancel="handleCancel"
-          :loadingConfirmEdit="loadingConfirmEdit"
+          :handle-cancel="handleCancel"
+          :loading-confirm-edit="loadingConfirmEdit"
           @click="handleConfirm"
         />
       </template>
@@ -164,6 +164,7 @@ export default class MainPage extends Vue {
       .limit(1)
       .single()
     if (data) {
+      console.log('🚀 ~ MainPage ~ handleAddTask ~ data', data)
       this.tasks.push(data)
     }
     this.loadingConfirmAdd = false
@@ -213,9 +214,11 @@ export default class MainPage extends Vue {
     }
   }
 
-  async handleDeleteTask(id: number) {
-    await this.$supabase.from('task').delete().match({ id })
-    this.tasks = this.tasks.filter((task) => task.id !== id)
+  async handleDeleteTask(id?: number) {
+    if (id) {
+      await this.$supabase.from('task').delete().match({ id })
+      this.tasks = this.tasks.filter((task) => task.id !== id)
+    }
   }
 }
 </script>

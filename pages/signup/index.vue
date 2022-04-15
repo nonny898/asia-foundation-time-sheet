@@ -14,9 +14,9 @@
     </v-card-text>
     <v-divider class="my-4" />
     <v-card-actions class="d-block">
-      <v-btn block color="primary" @click="signIn"> Login </v-btn>
+      <v-btn block color="primary" @click="signUp"> Confirm </v-btn>
       <div class="my-4" />
-      <v-btn block @click="signUp"> Signup </v-btn>
+      <v-btn block @click="cancel"> Cancel </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -31,18 +31,20 @@ export default class LoginPage extends Vue {
   email: string = ''
   password: string = ''
 
-  async signIn() {
-    const { user } = await this.$supabase.auth.signIn({
+  cancel() {
+    this.$router.push('/login')
+  }
+
+  async signUp() {
+    const { user } = await this.$supabase.auth.signUp({
       email: this.email,
       password: this.password,
     })
     if (user) {
-      this.$router.push('/')
+      this.email = ''
+      this.password = ''
+      this.$router.push('/login')
     }
-  }
-
-  signUp() {
-    this.$router.push('/signup')
   }
 }
 </script>

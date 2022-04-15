@@ -5,8 +5,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const getTableBody = (tasks) => {
   const tableData = tasks.map((task) => {
     delete task.id
-    return Object.values(task)
+    return Object.values(task).map(value => {
+      if (value === '') return '-'
+      return value
+    })
   })
+  console.log('🚀 ~ tableData ~ tableData', tableData)
   return [
     ['Date', 'Hours Worked', 'Work with Staff', 'Description'],
     ...tableData,

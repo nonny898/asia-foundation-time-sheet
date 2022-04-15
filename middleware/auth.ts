@@ -1,10 +1,18 @@
 import { Middleware } from '@nuxt/types'
 
+const unauthorizedPage = ['/login', '/signup']
+
 const authMiddleware: Middleware = (context: any) => {
-  if (context.route.fullPath !== '/login' && !context.$supabase.auth.user()) {
+  if (
+    !unauthorizedPage.includes(context.route.fullPath) &&
+    !context.$supabase.auth.user()
+  ) {
     return context.redirect('/login')
   }
-  if (context.route.fullPath === '/login' && context.$supabase.auth.user()) {
+  if (
+    unauthorizedPage.includes(context.route.fullPath) &&
+    context.$supabase.auth.user()
+  ) {
     return context.redirect('/')
   }
 }
