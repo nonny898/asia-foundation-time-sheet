@@ -1,4 +1,8 @@
 
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none !important;
+  border: 1px solid #e2e4e6;
+}
 
 .v-card__title,
 .v-card__actions {

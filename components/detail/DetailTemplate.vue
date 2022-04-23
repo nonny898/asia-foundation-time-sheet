@@ -18,9 +18,11 @@
         {{ information.chargeString }}
       </v-col>
     </v-row>
-    <v-row class="template-table__container">
+    <v-row>
       <v-col cols="12">
-        <detail-table :items="tasks" v-bind="$attrs" />
+        <div class="template-table__container">
+          <detail-table :items="tasks" v-bind="$attrs" />
+        </div>
       </v-col>
     </v-row>
     <v-row class="template-footer__container">
