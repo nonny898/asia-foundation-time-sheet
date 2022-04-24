@@ -1,0 +1,21 @@
+.theme--light.v-label {
+  color: #7c95ff !important;
+}
+
+.v-picker,
+.v-menu__content {
+  border-radius: 10px !important;
+box-shadow: 0px 0px 16px 0px #7c94ff65 !important;
+}
+
+.field-label {
+  font-size: 20px;
+  line-height: 26px;
+  margin-bottom: 1rem;
+  color: #7c95ff !important;
+  .label-remark {
+    font-size: 10px;
+    line-height: 26px;
+    color: #b3b3b3 !important;
+  }
+}

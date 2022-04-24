@@ -1,46 +1,51 @@
 <template>
-  <v-card>
-    <v-card-title class="headline"> Main Information </v-card-title>
-    <v-card-text>
+  <div>
+    <div class="headline pa-4">
+      <span>
+        <v-icon color="primary"> mdi-information-outline </v-icon>
+        Main Information
+      </span>
+      <v-divider class="mt-2" />
+    </div>
+    <div>
       <v-row>
         <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="$attrs.value.name"
-            label="Name"
-            outlined
-          ></v-text-field>
+          <div class="field-label">Name</div>
+          <general-input-text v-model="$attrs.value.name" hide-details />
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <div class="field-label">Pay Period</div>
+          <general-input-text
             v-model="$attrs.value.payPeriod"
-            label="Pay Period"
-            outlined
             disabled
-          ></v-text-field>
+            hide-details
+          />
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <div class="field-label">Charge String</div>
+          <general-input-text
             v-model="$attrs.value.chargeString"
-            label="Charge String"
-            outlined
-          ></v-text-field>
+            hide-details
+          />
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <div class="field-label">Last Modified</div>
+          <general-input-text
             v-model="$attrs.value.date"
-            label="Last Modified"
-            outlined
             disabled
-          ></v-text-field>
+            hide-details
+          />
         </v-col>
       </v-row>
-    </v-card-text>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
-@Component({})
+@Component({
+  inheritAttrs: false,
+})
 export default class FormInfo extends Vue {}
 </script>

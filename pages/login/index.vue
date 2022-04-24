@@ -1,23 +1,23 @@
 <template>
-  <v-card width="50%" min-width="250">
+  <v-card width="300" min-width="250">
     <v-card-text>
       <v-form ref="form" lazy-validation>
         <v-row>
           <v-col class="pb-2" cols="12">
-            <v-text-field
+            <general-input-text
               v-model="email"
-              label="Email"
-              outlined
+              :is-login="true"
+              label="E-mail"
               :rules="[rules.required]"
             />
           </v-col>
         </v-row>
         <v-row>
           <v-col class="py-0" cols="12">
-            <v-text-field
+            <general-input-text
               v-model="password"
+              :is-login="true"
               label="Password"
-              outlined
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required]"
               :type="showPassword ? 'text' : 'password'"
@@ -28,11 +28,21 @@
         </v-row>
       </v-form>
     </v-card-text>
-    <v-divider class="my-4" />
+    <div class="my-2" />
     <v-card-actions class="d-block">
-      <v-btn block color="primary" @click="signIn"> Login </v-btn>
+      <general-button
+        :is-block="true"
+        :text="'Login'"
+        color="primary"
+        @click="signIn"
+      />
       <div class="my-4" />
-      <v-btn block @click="signUp"> Signup </v-btn>
+      <general-button
+        :is-block="true"
+        outlined
+        :text="'Signup'"
+        @click="signUp"
+      />
     </v-card-actions>
   </v-card>
 </template>

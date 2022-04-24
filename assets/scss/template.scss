@@ -1,18 +1,30 @@
-.template__container{
-  .template-header__container{
-    text-align: center;
+.template__container {
+  .template-header__container {
   }
 
-  .template-info__container{
-
+  .template-info__container {
   }
 
-  .template-table__container{
-    border: 1px solid #e2e4e6;
+  .template-table__container {
+    .template-table {
+      overflow: hidden;
+      border-radius: 10px !important;
+      box-shadow: 0px 0px 16px 0px #7c94ff65;
+      .v-data-table-header {
+        tr {
+          background-color: #7c95ff !important;
+          th {
+            border-bottom: none !important;
+            color: white !important;
+            text-transform: uppercase;
+            font-size: 1rem;
+            padding: 1rem;
+          }
+        }
+      }
+    }
   }
 
-  .template-footer__container{
-
+  .template-footer__container {
   }
 }
-

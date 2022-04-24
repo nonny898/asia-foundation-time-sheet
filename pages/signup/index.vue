@@ -1,28 +1,55 @@
 <template>
-  <v-card>
+  <v-card width="300" min-width="250">
     <v-card-text>
-      <v-row>
-        <v-col class="pb-0" cols="12">
-          <v-text-field v-model="email" label="Email" outlined />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="pt-2" cols="12">
-          <v-text-field v-model="password" label="Password" outlined />
-        </v-col>
-      </v-row>
+      <v-form ref="form" lazy-validation>
+        <v-row>
+          <v-col class="pb-2" cols="12">
+            <general-input-text
+              v-model="email"
+              :is-login="true"
+              label="E-mail"
+              :rules="[rules.required]"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="py-0" cols="12">
+            <general-input-text
+              v-model="password"
+              :is-login="true"
+              label="Password"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required]"
+              :type="showPassword ? 'text' : 'password'"
+              @click:append="showPassword = !showPassword"
+              @keyup.enter="signIn"
+            />
+          </v-col>
+        </v-row>
+      </v-form>
     </v-card-text>
-    <v-divider class="my-4" />
+    <div class="my-2" />
     <v-card-actions class="d-block">
-      <v-btn block color="primary" @click="signUp"> Confirm </v-btn>
+      <general-button
+        :is-block="true"
+        :text="'Confirm'"
+        color="primary"
+        @click="signUp"
+      />
       <div class="my-4" />
-      <v-btn block @click="cancel"> Cancel </v-btn>
+      <general-button
+        :is-block="true"
+        outlined
+        :text="'Cancel'"
+        @click="cancel"
+      />
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
+import { Validator } from '~/types/general.types'
 
 @Component({
   layout: 'empty',
@@ -30,20 +57,32 @@ import { Vue, Component } from 'nuxt-property-decorator'
 export default class LoginPage extends Vue {
   email: string = ''
   password: string = ''
+  showPassword: boolean = false
+
+  rules = {
+    required: (value: string) => !!value || 'Required.',
+  }
+
+  $refs!: {
+    form: Validator
+  }
 
   cancel() {
     this.$router.push('/login')
   }
 
   async signUp() {
-    const { user } = await this.$supabase.auth.signUp({
-      email: this.email,
-      password: this.password,
-    })
-    if (user) {
-      this.email = ''
-      this.password = ''
-      this.$router.push('/login')
+    const valid = await this.$refs.form.validate()
+    if (valid) {
+      const { user } = await this.$supabase.auth.signUp({
+        email: this.email,
+        password: this.password,
+      })
+      if (user) {
+        this.email = ''
+        this.password = ''
+        this.$router.push('/login')
+      }
     }
   }
 }

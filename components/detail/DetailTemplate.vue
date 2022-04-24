@@ -1,23 +1,13 @@
 <template>
   <div class="template__container">
-    <div class="template-header__container">
-      <div>The Asia Foundation</div>
-      <div>Time Sheet</div>
+    <div class="headline pa-4">
+      <span>
+        <v-icon color="primary"> mdi-calendar-range </v-icon>
+        <span> Time Sheet </span>
+        {{ title }}
+      </span>
+      <v-divider class="mt-2" />
     </div>
-    <v-row class="template-info__container">
-      <v-col cols="2"> Name: </v-col>
-      <v-col cols="10">
-        {{ information.name }}
-      </v-col>
-      <v-col cols="2"> Pay Period: </v-col>
-      <v-col cols="10">
-        {{ information.payPeriod }}
-      </v-col>
-      <v-col cols="2"> Charge String: </v-col>
-      <v-col cols="10">
-        {{ information.chargeString }}
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12">
         <div class="template-table__container">
@@ -26,7 +16,7 @@
       </v-col>
     </v-row>
     <v-row class="template-footer__container">
-      <v-col cols="2"> Total Hours: </v-col>
+      <!-- <v-col cols="2"> Total Hours: </v-col>
       <v-col cols="10">
         {{ totalHours }}
       </v-col>
@@ -46,11 +36,43 @@
       <v-col cols="2"> Date: </v-col>
       <v-col cols="10">
         {{ information.date }}
-      </v-col>
+      </v-col> -->
     </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-btn block @click="handlePrint">Print</v-btn>
+    <v-row justify="end">
+      <v-col cols="12" sm="6">
+        <div>
+          <div class="field-label">Total Hours</div>
+          <general-input-text :value="totalHours" disabled></general-input-text>
+        </div>
+        <div>
+          <div class="field-label">Total Staffs</div>
+          <general-input-text :value="totalStaff" disabled></general-input-text>
+        </div>
+        <div>
+          <div class="field-label">
+            Total Days
+            <span class="label-remark"> (8 hours is 1 working day) </span>
+          </div>
+          <general-input-text
+            :value="totalDays"
+            hint=""
+            persistent-hint
+            disabled
+          ></general-input-text>
+        </div>
+        <div>
+          <div class="field-label">Date</div>
+          <general-input-text
+            :value="information.date"
+            disabled
+          ></general-input-text>
+        </div>
+        <general-button
+          color="primary"
+          :is-block="true"
+          :text="'Save as PDF'"
+          @click="handlePrint"
+        />
       </v-col>
     </v-row>
   </div>

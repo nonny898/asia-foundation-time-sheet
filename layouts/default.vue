@@ -1,14 +1,14 @@
 <template>
   <v-app>
+    <v-app-bar absolute app flat color="primary" height="60" />
     <v-main>
-      <v-container fluid>
+      <v-container class="default-container" fluid>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer absolute app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+    <v-footer absolute app color="primary" height="60">
       <v-spacer />
-      <v-btn @click="signOut">Logout</v-btn>
+      <general-button :text="'Logout'" @click="signOut" />
     </v-footer>
   </v-app>
 </template>

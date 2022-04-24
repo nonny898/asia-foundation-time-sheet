@@ -1,59 +1,64 @@
 <template>
-  <v-card>
-    <v-card-title class="headline"> {{ title }} </v-card-title>
-    <v-card-text>
+  <div>
+    <div class="headline pa-4">
+      <span>
+        <v-icon color="primary"> mdi-format-list-bulleted </v-icon>
+        {{ title }}
+      </span>
+      <v-divider class="mt-2" />
+    </div>
+    <div>
       <v-row>
         <v-col class="pa-0" cols="12" :sm="isEdit ? 12 : 6">
           <v-row>
             <v-col cols="12" :sm="isEdit ? 4 : 12">
-              <v-text-field
+              <div class="field-label">Date</div>
+              <general-input-date-picker
                 v-model="$attrs.value.date"
-                label="Date"
-                outlined
-                hide-details=""
-              ></v-text-field>
+                :min="startMonthDate"
+                :max="endMonthDate"
+              ></general-input-date-picker>
             </v-col>
             <v-col cols="12" :sm="isEdit ? 4 : 12">
-              <v-text-field
+              <div class="field-label">Hours Worked</div>
+              <general-input-text
                 v-model.number="$attrs.value.hours"
+                hide-details
                 type="number"
-                label="Hours Worked"
-                outlined
-                hide-details=""
-              ></v-text-field>
+              ></general-input-text>
             </v-col>
             <v-col cols="12" :sm="isEdit ? 4 : 12">
-              <v-text-field
+              <div class="field-label">Work with Staff</div>
+              <general-input-text
                 v-model="$attrs.value.staff"
-                label="Work with Staff"
-                outlined
-                hide-details=""
-              ></v-text-field>
+                hide-details
+              ></general-input-text>
             </v-col>
           </v-row>
         </v-col>
         <v-col class="pa-0" cols="12" :sm="isEdit ? 12 : 6">
           <v-row>
             <v-col cols="12">
-              <v-textarea
-                v-model="$attrs.value.description"
-                rows="6"
-                label="Description"
-                outlined
-              ></v-textarea>
+              <div class="field-label">Description</div>
+              <general-input-area v-model="$attrs.value.description" />
             </v-col>
           </v-row>
         </v-col>
       </v-row>
-    </v-card-text>
+    </div>
     <v-card-actions>
-      <v-btn v-if="isEdit" @click="handleCancel"> Cancel </v-btn>
+      <general-button v-if="isEdit" :text="'Cancel'" @click="handleCancel" />
       <v-spacer />
-      <v-btn :block="!isEdit" :loading="loadingButton" v-on="$listeners">
-        {{ buttonText }}
-      </v-btn>
+      <general-button
+        :class="!isEdit ? 'button-cta__add' : ''"
+        :color="isEdit ? 'primary' : false"
+        :is-block="!isEdit"
+        :loading="loadingButton"
+        :text="buttonText"
+        v-on="$listeners"
+      />
     </v-card-actions>
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -64,6 +69,8 @@ export default class FormTask extends Vue {
   @Prop({ default: false }) isEdit!: boolean
   @Prop({ default: false }) loadingConfirmAdd!: boolean
   @Prop({ default: false }) loadingConfirmEdit!: boolean
+  @Prop({ default: null }) startMonthDate!: string | null
+  @Prop({ default: null }) endMonthDate!: string | null
   @Prop({ required: false }) handleCancel!: () => void
 
   get title() {

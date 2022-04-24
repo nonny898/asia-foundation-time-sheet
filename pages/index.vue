@@ -12,6 +12,8 @@
       <v-col cols="12">
         <form-task
           v-model="newTask"
+          :start-month-date="startMonthDate"
+          :end-month-date="endMonthDate"
           :loading-confirm-add="loadingConfirmAdd"
           @click="handleConfirm"
         />
@@ -36,8 +38,11 @@
       <template #dialog-content>
         <form-task
           v-model="existingTask"
+          class="form-task__container"
           :is-edit="true"
           :handle-cancel="handleCancel"
+          :start-month-date="startMonthDate"
+          :end-month-date="endMonthDate"
           :loading-confirm-edit="loadingConfirmEdit"
           @click="handleConfirm"
         />
@@ -100,10 +105,22 @@ export default class MainPage extends Vue {
     return ''
   }
 
+  get startMonthDate() {
+    return dayjs(this.monthPicker).startOf('month').format('YYYY-MM-DD')
+  }
+
+  get endMonthDate() {
+    return dayjs(this.monthPicker).endOf('month').format('YYYY-MM-DD')
+  }
+
   async created() {
     this.monthPicker = dayjs().format('YYYY-MM')
     this.information.date = dayjs().format('DD MMMM YYYY')
     await this.handlePeriodChange(this.monthPicker)
+  }
+
+  setNewTaskStartDate() {
+    this.newTask.date = this.startMonthDate
   }
 
   async importTasks() {
@@ -114,6 +131,7 @@ export default class MainPage extends Vue {
       .eq('period_id', this.period.id)
     if (data) {
       this.tasks = data
+      this.setNewTaskStartDate()
     }
   }
 
@@ -148,6 +166,7 @@ export default class MainPage extends Vue {
       this.period = data
       this.information.payPeriod = `${this.period.month} - ${this.period.year}`
       this.tasks = []
+      this.setNewTaskStartDate()
     }
   }
 
@@ -206,7 +225,7 @@ export default class MainPage extends Vue {
     } else {
       this.handleAddTask(this.newTask)
       this.newTask = {
-        date: '',
+        date: this.startMonthDate,
         hours: 0,
         staff: '',
         description: '',

@@ -24,13 +24,10 @@ export default {
   css: [{ src: '~/assets/scss/main.scss', lang: 'scss' }],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    { src: '@/plugins/supabase.client.js' }
-  ],
-
+  plugins: [{ src: '@/plugins/supabase.client.js' }],
 
   render: {
-    resourceHints: false
+    resourceHints: false,
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,7 +45,7 @@ export default {
   modules: [],
 
   router: {
-    middleware: 'auth'
+    middleware: 'auth',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -57,6 +54,12 @@ export default {
     theme: {
       dark: false,
       themes: {
+        light: {
+          primary: '#7C95FF',
+          secondary: '#b0bec5',
+          accent: '#8c9eff',
+          error: '#b71c1c',
+        },
         dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
