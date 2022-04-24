@@ -51,7 +51,7 @@
       <v-spacer />
       <general-button
         :class="!isEdit ? 'button-cta__add' : ''"
-        :color="isEdit ? 'primary' : false"
+        :color="isEdit ? 'primary' : ''"
         :is-block="!isEdit"
         :loading="loadingButton"
         :text="buttonText"

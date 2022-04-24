@@ -4,7 +4,6 @@
       <span>
         <v-icon color="primary"> mdi-calendar-range </v-icon>
         <span> Time Sheet </span>
-        {{ title }}
       </span>
       <v-divider class="mt-2" />
     </div>
@@ -15,29 +14,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row class="template-footer__container">
-      <!-- <v-col cols="2"> Total Hours: </v-col>
-      <v-col cols="10">
-        {{ totalHours }}
-      </v-col>
-      <v-col cols="2"> Total Staffs: </v-col>
-      <v-col cols="10">
-        {{ totalStaff }}
-      </v-col>
-      <v-col cols="2"> Total Days: </v-col>
-      <v-col cols="10">
-        {{ totalDays }}
-      </v-col>
-      <v-col cols="12">*** Remark: 8 hours is 1 working day</v-col>
-      <v-col cols="2"> Submitted By: </v-col>
-      <v-col cols="10">
-        {{ information.name }}
-      </v-col>
-      <v-col cols="2"> Date: </v-col>
-      <v-col cols="10">
-        {{ information.date }}
-      </v-col> -->
-    </v-row>
+    <v-row class="template-footer__container"> </v-row>
     <v-row justify="end">
       <v-col cols="12" sm="6">
         <div>

@@ -181,6 +181,7 @@ export default class MainPage extends Vue {
           user_id: this.userId,
         },
       ])
+      .select('id, date, hours, staff, description')
       .limit(1)
       .single()
     if (data) {
