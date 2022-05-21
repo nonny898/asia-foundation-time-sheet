@@ -87,8 +87,9 @@ export default class LoginPage extends Vue {
           this.email,
           this.password
         )
-        console.log('user :>> ', user)
-        this.$router.push('/')
+        if (user) {
+          this.$router.push('/')
+        }
       } catch (e) {}
     }
   }
