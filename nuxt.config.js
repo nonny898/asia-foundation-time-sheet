@@ -22,7 +22,10 @@ export default {
   css: [{ src: '~/assets/scss/main.scss', lang: 'scss' }],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '@/plugins/supabase.client.js' }],
+  plugins: [
+    { src: '@/plugins/supabase.client.js' },
+    { src: '~plugins/firebase-accessor.ts' },
+  ],
 
   render: {
     resourceHints: false,
@@ -37,10 +40,27 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/firebase',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],
+
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyAFkft4kTHf9NuFPdV0JjXZwNvaKwsoBnE',
+      authDomain: 'taf-timesheet.firebaseapp.com',
+      projectId: 'taf-timesheet',
+      storageBucket: 'taf-timesheet.appspot.com',
+      messagingSenderId: '1075900207765',
+      appId: '1:1075900207765:web:8af8ad8fbfb2d44c19419c',
+      measurementId: 'G-WNVV0RLPFG',
+    },
+    services: {
+      auth: true,
+      firestore: true,
+    },
+  },
 
   router: {
     middleware: 'auth',
