@@ -1,13 +1,9 @@
-export interface PeriodInterface {
-  id: string
-  month: string
-  year: string
-}
-
-export interface TaskInterface {
-  id?: number
+export interface TaskDetailInterface {
+  id?: string
   date: string
   hours: number
   staff: string
   description: string
+  periodId?: string
+  userId?: string
 }

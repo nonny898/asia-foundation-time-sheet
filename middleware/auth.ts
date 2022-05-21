@@ -5,13 +5,13 @@ const unauthorizedPage = ['/login', '/signup']
 const authMiddleware: Middleware = (context: any) => {
   if (
     !unauthorizedPage.includes(context.route.fullPath) &&
-    !context.$supabase.auth.user()
+    !context.$fire.auth.currentUser
   ) {
     return context.redirect('/login')
   }
   if (
     unauthorizedPage.includes(context.route.fullPath) &&
-    context.$supabase.auth.user()
+    context.$fire.auth.currentUser
   ) {
     return context.redirect('/')
   }

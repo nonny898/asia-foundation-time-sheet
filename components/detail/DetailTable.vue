@@ -21,13 +21,13 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { DataTableHeader } from 'vuetify'
-import { TaskInterface } from '~/types/Task/task.types'
+import { TaskDetailInterface } from '~/types/Task/task.types'
 
 @Component({
   inheritAttrs: false,
 })
 export default class DetailTable extends Vue {
-  @Prop({ required: true }) editItem!: (task: TaskInterface) => void
+  @Prop({ required: true }) editItem!: (task: TaskDetailInterface) => void
   @Prop({ required: true }) deleteItem!: (id: number) => void
 
   headers: DataTableHeader[] = [

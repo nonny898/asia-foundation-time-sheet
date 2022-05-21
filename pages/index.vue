@@ -33,6 +33,7 @@
     <general-dialog
       v-model="editDialog"
       :max-width="750"
+      persistent
       @click:outside="() => (isEdit = false)"
     >
       <template #dialog-content>
@@ -54,7 +55,10 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
-import { PeriodInterface, TaskInterface } from '~/types/Task/task.types'
+import { TaskDetailInterface } from '~/types/Task/task.types'
+import * as PeriodService from '~/services/period.service'
+import * as TaskService from '~/services/task.service'
+import { PeriodDetailInterface } from '~/types/Period/period.types'
 
 export interface InformationInterface {
   name: string
@@ -65,12 +69,13 @@ export interface InformationInterface {
 
 @Component({})
 export default class MainPage extends Vue {
-  tasks: TaskInterface[] = []
+  tasks: TaskDetailInterface[] = []
 
-  period: PeriodInterface = {
+  period: PeriodDetailInterface = {
     id: '',
     month: '',
     year: '',
+    userId: '',
   }
 
   monthPicker: string = ''
@@ -82,14 +87,14 @@ export default class MainPage extends Vue {
     date: '',
   }
 
-  newTask: TaskInterface = {
+  newTask: TaskDetailInterface = {
     date: '',
     hours: 0,
     staff: '',
     description: '',
   }
 
-  existingTask: TaskInterface | null = null
+  existingTask: TaskDetailInterface | null = null
 
   isEdit: boolean = false
   editDialog: boolean = false
@@ -124,73 +129,90 @@ export default class MainPage extends Vue {
   }
 
   async importTasks() {
-    const { data } = await this.$supabase
-      .from('task')
-      .select('id, date, hours, staff, description')
-      .eq('user_id', this.userId)
-      .eq('period_id', this.period.id)
+    // const { data } = await this.$supabase
+    //   .from('task')
+    //   .select('id, date, hours, staff, description')
+    //   .eq('user_id', this.userId)
+    //   .eq('period_id', this.period.id)
+    const data = await TaskService.getTasks(
+      '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
+      this.period.id
+    )
     if (data) {
-      this.tasks = data
+      this.tasks = data.sort((a, b) =>
+        dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1
+      )
       this.setNewTaskStartDate()
     }
   }
 
+  // TODO: change userId
   async handlePeriodChange(value: string) {
     const period = dayjs(value).format('MMMM-YYYY').split('-')
     if (period.length > 1) {
-      const { data } = await this.$supabase
-        .from('period')
-        .select('id, month, year')
-        .eq('month', period[0])
-        .eq('year', period[1])
-        .eq('user_id', this.userId)
-        .limit(1)
-        .single()
+      const data = await PeriodService.getPeriod({
+        month: period[0],
+        year: period[1],
+        userId: '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
+      })
+      // const { data } = await this.$supabase
+      //   .from('period')
+      //   .select('id, month, year')
+      //   .eq('month', period[0])
+      //   .eq('year', period[1])
+      //   .eq('user_id', this.userId)
+      //   .limit(1)
+      //   .single()
       if (data) {
         this.period = data
         this.information.payPeriod = `${this.period.month} - ${this.period.year}`
         await this.importTasks()
-      } else {
-        this.createPeriod(period[0], period[1])
       }
+      // } else {
+      // this.createPeriod(period[0], period[1])
     }
   }
 
-  async createPeriod(month: string, year: string) {
-    const { data } = await this.$supabase
-      .from('period')
-      .insert([{ month, year, user_id: this.userId }])
-      .limit(1)
-      .single()
-    if (data) {
-      this.period = data
-      this.information.payPeriod = `${this.period.month} - ${this.period.year}`
-      this.tasks = []
-      this.setNewTaskStartDate()
-    }
-  }
+  // async createPeriod(month: string, year: string) {
+  //   const { data } = await this.$supabase
+  //     .from('period')
+  //     .insert([{ month, year, user_id: this.userId }])
+  //     .limit(1)
+  //     .single()
+  //   if (data) {
+  //     this.period = data
+  //     this.information.payPeriod = `${this.period.month} - ${this.period.year}`
+  //     this.tasks = []
+  //     this.setNewTaskStartDate()
+  //   }
+  // }
 
-  async handleAddTask(payload: TaskInterface) {
+  async handleAddTask(form: TaskDetailInterface) {
     this.loadingConfirmAdd = true
-    const { data } = await this.$supabase
-      .from('task')
-      .insert([
-        {
-          ...payload,
-          period_id: this.period.id,
-          user_id: this.userId,
-        },
-      ])
-      .select('id, date, hours, staff, description')
-      .limit(1)
-      .single()
+    const data = await TaskService.createTask({
+      ...form,
+      periodId: this.period.id,
+      userId: '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
+    })
+    // .from('task')
+    // .insert([
+    //   {
+    //     ...payload,
+    //     period_id: this.period.id,
+    //     user_id: this.userId,
+    //   },
+    // ])
+    // .select('id, date, hours, staff, description')
+    // .limit(1)
+    // .single()
     if (data) {
       this.tasks.push(data)
+      this.tasks.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
     }
     this.loadingConfirmAdd = false
   }
 
-  handleEditTask(payload: TaskInterface) {
+  handleEditTask(payload: TaskDetailInterface) {
     this.existingTask = Object.assign({}, payload)
     this.isEdit = true
     this.editDialog = true
@@ -204,16 +226,15 @@ export default class MainPage extends Vue {
   async handleUpdateTask() {
     this.loadingConfirmEdit = true
     if (this.existingTask && this.existingTask.id) {
-      await this.$supabase
-        .from('task')
-        .update({ ...this.existingTask })
-        .match({ id: this.existingTask.id })
-      this.tasks = this.tasks.map((task) => {
-        if (this.existingTask!.id === task.id) {
-          return this.existingTask as TaskInterface
-        }
-        return task
-      })
+      await TaskService.updateTask(this.existingTask.id, this.existingTask)
+      this.tasks = this.tasks
+        .map((task) => {
+          if (this.existingTask!.id === task.id) {
+            return this.existingTask as TaskDetailInterface
+          }
+          return task
+        })
+        .sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
     }
     this.isEdit = false
     this.editDialog = false
@@ -234,9 +255,9 @@ export default class MainPage extends Vue {
     }
   }
 
-  async handleDeleteTask(id?: number) {
+  async handleDeleteTask(id?: string) {
     if (id) {
-      await this.$supabase.from('task').delete().match({ id })
+      await TaskService.deleteTask(id)
       this.tasks = this.tasks.filter((task) => task.id !== id)
     }
   }

@@ -17,6 +17,7 @@
                 v-model="$attrs.value.date"
                 :min="startMonthDate"
                 :max="endMonthDate"
+                :is-required="true"
               ></general-input-date-picker>
             </v-col>
             <v-col cols="12" :sm="isEdit ? 4 : 12">
@@ -55,6 +56,7 @@
         :is-block="!isEdit"
         :loading="loadingButton"
         :text="buttonText"
+        :disabled="!canSave"
         v-on="$listeners"
       />
     </v-card-actions>
@@ -83,6 +85,11 @@ export default class FormTask extends Vue {
 
   get loadingButton() {
     return this.isEdit ? this.loadingConfirmEdit : this.loadingConfirmAdd
+  }
+
+  get canSave() {
+    const form = this.$attrs.value as any
+    return form.date !== '' && form.hours !== 0 && form.description !== ''
   }
 }
 </script>

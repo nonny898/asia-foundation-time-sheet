@@ -58,12 +58,12 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { InformationInterface } from '~/pages/index.vue'
-import { TaskInterface } from '~/types/Task/task.types'
+import { TaskDetailInterface } from '~/types/Task/task.types'
 import * as PDFService from '~/utils/generate-pdf.utils.js'
 
 @Component({})
 export default class DetailTemplate extends Vue {
-  @Prop({ required: true }) tasks!: TaskInterface[]
+  @Prop({ required: true }) tasks!: TaskDetailInterface[]
   @Prop({ required: true }) information!: InformationInterface
   @Prop({ required: true }) importTasks!: () => Promise<void>
 

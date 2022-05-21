@@ -3,6 +3,11 @@
     <v-card-text>
       <v-form ref="form" lazy-validation>
         <v-row>
+          <v-col class="pb-0" cols="12">
+            <v-img :src="require('~/assets/images/master/TAF-logo.png')" />
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col class="pb-2" cols="12">
             <general-input-text
               v-model="email"
@@ -70,13 +75,21 @@ export default class LoginPage extends Vue {
   async signIn() {
     const valid = await this.$refs.form.validate()
     if (valid) {
-      const { user } = await this.$supabase.auth.signIn({
-        email: this.email,
-        password: this.password,
-      })
-      if (user) {
+      // const { user } = await this.$supabase.auth.signIn({
+      //   email: this.email,
+      //   password: this.password,
+      // })
+      // if (user) {
+      //   this.$router.push('/')
+      // }
+      try {
+        const user = await this.$fire.auth.signInWithEmailAndPassword(
+          this.email,
+          this.password
+        )
+        console.log('user :>> ', user)
         this.$router.push('/')
-      }
+      } catch (e) {}
     }
   }
 

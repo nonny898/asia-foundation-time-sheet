@@ -21,10 +21,10 @@ import { Vue, Component } from 'nuxt-property-decorator'
 })
 export default class DefaultLayout extends Vue {
   async signOut() {
-    const { error } = await this.$supabase.auth.signOut()
-    if (!error) {
+    try {
+      await this.$fire.auth.signOut()
       this.$router.push('/login')
-    }
+    } catch (error) {}
   }
 }
 </script>
