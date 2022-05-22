@@ -1,18 +1,14 @@
 import { Middleware } from '@nuxt/types'
+import userModule from '~/store/user-module'
 
 const unauthorizedPage = ['/login', '/signup']
 
 const authMiddleware: Middleware = (context: any) => {
-  if (
-    !unauthorizedPage.includes(context.route.fullPath) &&
-    !context.$fire.auth.currentUser
-  ) {
+  const user = userModule.user
+  if (!unauthorizedPage.includes(context.route.fullPath) && !user) {
     return context.redirect('/login')
   }
-  if (
-    unauthorizedPage.includes(context.route.fullPath) &&
-    context.$fire.auth.currentUser
-  ) {
+  if (unauthorizedPage.includes(context.route.fullPath) && user) {
     return context.redirect('/')
   }
 }

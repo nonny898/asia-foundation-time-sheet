@@ -75,13 +75,6 @@ export default class LoginPage extends Vue {
   async signIn() {
     const valid = await this.$refs.form.validate()
     if (valid) {
-      // const { user } = await this.$supabase.auth.signIn({
-      //   email: this.email,
-      //   password: this.password,
-      // })
-      // if (user) {
-      //   this.$router.push('/')
-      // }
       try {
         const user = await this.$fire.auth.signInWithEmailAndPassword(
           this.email,

@@ -1,10 +1,12 @@
 <template>
   <div>
     <div class="headline pa-4">
-      <span>
-        <v-icon color="primary"> mdi-format-list-bulleted </v-icon>
-        {{ title }}
-      </span>
+      <div class="d-flex align-center">
+        <v-icon class="mr-2" color="primary"> mdi-format-list-bulleted </v-icon>
+        <span>
+          {{ title }}
+        </span>
+      </div>
       <v-divider class="mt-2" />
     </div>
     <div>

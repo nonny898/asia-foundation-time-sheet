@@ -10,6 +10,15 @@
     </v-row>
     <v-row>
       <v-col cols="12">
+        <detail-template
+          :tasks="tasks"
+          :edit-item="handleEditTask"
+          :delete-item="handleDeleteTask"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <form-task
           v-model="newTask"
           :start-month-date="startMonthDate"
@@ -21,21 +30,14 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <detail-template
+        <detail-summary
           :information="information"
           :tasks="tasks"
-          :edit-item="handleEditTask"
-          :delete-item="handleDeleteTask"
           :import-tasks="importTasks"
         />
       </v-col>
     </v-row>
-    <general-dialog
-      v-model="editDialog"
-      :max-width="750"
-      persistent
-      @click:outside="() => (isEdit = false)"
-    >
+    <general-dialog v-model="editDialog" :max-width="750" persistent>
       <template #dialog-content>
         <form-task
           v-model="existingTask"
@@ -59,6 +61,7 @@ import { TaskDetailInterface } from '~/types/Task/task.types'
 import * as PeriodService from '~/services/period.service'
 import * as TaskService from '~/services/task.service'
 import { PeriodDetailInterface } from '~/types/Period/period.types'
+import userModule from '~/store/user-module'
 
 export interface InformationInterface {
   name: string
@@ -102,10 +105,14 @@ export default class MainPage extends Vue {
   loadingConfirmAdd: boolean = false
   loadingConfirmEdit: boolean = false
 
+  get user() {
+    return userModule.user
+  }
+
   get userId() {
-    const user = this.$supabase.auth.user()
+    const user = this.$fire.auth.currentUser
     if (user) {
-      return user.id
+      return user.uid
     }
     return ''
   }
@@ -129,15 +136,7 @@ export default class MainPage extends Vue {
   }
 
   async importTasks() {
-    // const { data } = await this.$supabase
-    //   .from('task')
-    //   .select('id, date, hours, staff, description')
-    //   .eq('user_id', this.userId)
-    //   .eq('period_id', this.period.id)
-    const data = await TaskService.getTasks(
-      '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
-      this.period.id
-    )
+    const data = await TaskService.getTasks(this.userId, this.period.id)
     if (data) {
       this.tasks = data.sort((a, b) =>
         dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1
@@ -146,65 +145,29 @@ export default class MainPage extends Vue {
     }
   }
 
-  // TODO: change userId
   async handlePeriodChange(value: string) {
     const period = dayjs(value).format('MMMM-YYYY').split('-')
     if (period.length > 1) {
       const data = await PeriodService.getPeriod({
         month: period[0],
         year: period[1],
-        userId: '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
+        userId: this.userId,
       })
-      // const { data } = await this.$supabase
-      //   .from('period')
-      //   .select('id, month, year')
-      //   .eq('month', period[0])
-      //   .eq('year', period[1])
-      //   .eq('user_id', this.userId)
-      //   .limit(1)
-      //   .single()
       if (data) {
         this.period = data
         this.information.payPeriod = `${this.period.month} - ${this.period.year}`
         await this.importTasks()
       }
-      // } else {
-      // this.createPeriod(period[0], period[1])
     }
   }
-
-  // async createPeriod(month: string, year: string) {
-  //   const { data } = await this.$supabase
-  //     .from('period')
-  //     .insert([{ month, year, user_id: this.userId }])
-  //     .limit(1)
-  //     .single()
-  //   if (data) {
-  //     this.period = data
-  //     this.information.payPeriod = `${this.period.month} - ${this.period.year}`
-  //     this.tasks = []
-  //     this.setNewTaskStartDate()
-  //   }
-  // }
 
   async handleAddTask(form: TaskDetailInterface) {
     this.loadingConfirmAdd = true
     const data = await TaskService.createTask({
       ...form,
       periodId: this.period.id,
-      userId: '1r3IMZ7CqzYnmhr0QH1rHpseLqw1',
+      userId: this.userId,
     })
-    // .from('task')
-    // .insert([
-    //   {
-    //     ...payload,
-    //     period_id: this.period.id,
-    //     user_id: this.userId,
-    //   },
-    // ])
-    // .select('id, date, hours, staff, description')
-    // .limit(1)
-    // .single()
     if (data) {
       this.tasks.push(data)
       this.tasks.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
@@ -219,11 +182,13 @@ export default class MainPage extends Vue {
   }
 
   handleCancel() {
+    console.log('🚀 ~ MainPage ~ handleCancel ~ handleCancel')
     this.isEdit = false
     this.editDialog = false
   }
 
   async handleUpdateTask() {
+    console.log('🚀 ~ MainPage ~ handleUpdateTask ~ handleUpdateTask')
     this.loadingConfirmEdit = true
     if (this.existingTask && this.existingTask.id) {
       await TaskService.updateTask(this.existingTask.id, this.existingTask)

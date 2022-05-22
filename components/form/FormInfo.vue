@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="headline pa-4">
-      <span>
-        <v-icon color="primary"> mdi-information-outline </v-icon>
-        Main Information
-      </span>
+      <div class="d-flex align-center">
+        <v-icon class="mr-2" color="primary"> mdi-information-outline </v-icon>
+        <span>Main Information</span>
+      </div>
       <v-divider class="mt-2" />
     </div>
     <div>

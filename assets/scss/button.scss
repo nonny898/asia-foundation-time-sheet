@@ -8,4 +8,14 @@
     box-shadow: none;
     border: none
   }
+
+  &.save {
+    color: #ffffff !important;
+  }
+}
+
+.button-hint {
+  padding-top: 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255, 0, 0, 0.644);
 }

@@ -15,7 +15,7 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/png', href: '/TAF-tab-logo.png' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -23,8 +23,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/supabase.client.js' },
     { src: '~plugins/firebase-accessor.ts' },
+    { src: '~plugins/firebase-auth.ts' },
   ],
 
   render: {
